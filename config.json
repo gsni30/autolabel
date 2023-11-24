@@ -1,0 +1,24 @@
+{
+    "task_name": "CraigslistConversationClassification",
+    "task_type": "classification",
+    "dataset": {
+        "label_column": "label",
+        "delimiter": ",",
+        "data_column": "example"
+    },
+    "model": {
+        "provider": "openai",
+        "name": "gpt-3.5-turbo"
+    },
+    "prompt": {
+        "context": "Buyer: Hey, I am interested in this product. Why are you selling it? Seller: Hello, I am selling it to help me pay for schooling. They are limited edition and still wrapped in plastic. Buyer: OK, 220 is a but high for me at the moment. Would $200 work? Is the color gold or am I seeing it wrong? Seller: Yes, the color is gold and they retail for around 300. I could let them go for 200, it's a deal. Seller:  Buyer: Ok great. Buyer: Output:",
+        "task_guidelines": "You are an expert at understanding conversations.\n Given a text passage as input comprising of dialogue of negotiations between a seller and a buyer about the sale of an item, your task is to classify the item being sold into one of the following categories:\n",
+        "output_guidelines": "You will answer with just the the correct output label and nothing else.",
+        "labels": [
+            "housing", "furniture", "bike", "phone", "car", "electronics"
+        ],
+        "example_template": "Input: {}\n Output: {}",
+        "example_input": "Buyer: Hi, I saw an add for this 6 bedroom apartment and I am interested in it. Seller: Helo, thank you for the interest. Let me know if you have any questions Buyer: I would like to offer $7696 for it Seller: I'm sorry that is 30% lower than the listing price Buyer: Would you take $9000? Seller: I'd be willing to offer about 10% off.. at $10000 per month Seller:  Buyer: Can you do 15 % off? Seller: $9800 final offer Buyer: Ok, I can do that. \n Seller: great, thank you Buyer: \n Output: housing \n Input: Buyer: sure Seller: Hello, I would like to offer this for $2550.   Buyer: Sorry, I already sold it for 2800 and this is messed up Buyer: \n Output: housing \n Input: Buyer: Hi, I am interested in the apartment.  Is there a lease?  Is it located in a good neighborhood? \n Seller: yes the community is very good and is very safe as it is gated. It has 2 pools and a 24 hour fitness center for its residents Buyer: Great!  I see you want $1487, is there any way you can go down on the price a bit? \n Seller: The price is negotiable within reason Buyer: My offer is $1040. Seller: Thats a little low. Is it possible to meet more in the middle at $1250? Buyer: $1200 is the most I can do. Seller: That sounds good to me Buyer: Great. Buyer: \n Seller: \n Output: housing \n Input: Buyer: Hi there. Is this available?  Seller: Yes sir it is Buyer: is it new or used?  Seller: It's used sir. I'm selling it for 4400 Buyer: The price is way too high for me. Is there any room for negotiating here? \n Seller: Sure. How much are you willing to pay?  Buyer: $2200 please Seller: I won't be able to go that low..that's below the book value. What about 4000? Buyer: I can't afford more than 3500.",
+        "example_output": "car"
+    }
+}
