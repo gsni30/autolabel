@@ -1,0 +1,24 @@
+{
+    "task_name": "Name of the task",
+    "task_type": "Classification/NER",
+    "dataset": {
+        "label_column": "Column in dataset which has the labels.",
+        "delimiter": ",",
+        "data_column": "Column in dataset which has the data which needs to be labeled."
+    },
+    "model": {
+        "provider": "Provider of model such as openai, huggingface. Currently only supporting OpenAI.",
+        "name": "Name of the model. Currently only supporting gpt-3.5-turbo ."
+    },
+    "prompt": {
+        "context": "Example prompt.",
+        "task_guidelines": "Explain the task which needs to be performed.",
+        "output_guidelines": "Output to be expected such as label.",
+        "labels": [
+            "List of expected labels."
+        ],
+        "example_template": "Template of example prompt. Eg: Input: , Output:",
+        "example_input": "Example input.",
+        "example_output": "Example output."
+    }
+}
