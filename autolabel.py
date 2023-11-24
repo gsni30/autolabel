@@ -2,6 +2,7 @@ import evadb
 import os
 import json
 import argparse
+import time
 
 READ_MODE = 'r'
 
@@ -51,7 +52,15 @@ def init_database(config):
 def load_data_into_db(cursor, config, file_path):
     cursor.query("LOAD CSV '{}' INTO {}".format(file_path, config['task_name'])).df()
 
+def calculate_accuracy(result, actual_label_col, expected_label_col):
+    num_accurate_labels = (result[actual_label_col] == result[expected_label_col]).sum()
+    print(result.shape)
+    total_data = result.shape[0]
+    return num_accurate_labels / (total_data*1.0)
+
 def label_data(cursor, config, output_file_path):
+    metrics = { }
+    start_time = time.time()
     prompt = config['prompt']
     dataset = config['dataset']
     labels = prompt['labels']
@@ -62,10 +71,17 @@ def label_data(cursor, config, output_file_path):
         label_str += (label + '\n')
     input_prompt = prompt['task_guidelines'] + " \n " + label_str + " \n " + prompt['output_guidelines']
     context = prompt['example_template'].format(prompt['example_input'], prompt['example_output'])
-    query = 'SELECT {}, ChatGPT({}, "{}", "{}") FROM {} LIMIT 5'.format(data_column, data_column, context, input_prompt, config['task_name'])
+    query = 'SELECT {}, {}, ChatGPT({}, "{}", "{}") FROM {}'.format(data_column, label_column, data_column, context, input_prompt, config['task_name'])
     result_df = cursor.query(query).df()
-    result_df.rename(columns={ 'response': label_column }, inplace=True)
-    result_df.to_csv(output_file_path, index=False)
+    accuracy = calculate_accuracy(result_df, 'response', label_column)
+    df_to_write = result_df[[data_column, 'response']]
+    df_to_write.rename(columns={ 'response': label_column }, inplace=True)
+    df_to_write.to_csv(output_file_path, index=False)
+    end_time = time.time()
+    metrics['total_time_in_sec'] = end_time- start_time
+    metrics['accuracy'] = accuracy
+    metrics['count'] = df_to_write.shape[0]
+    print(metrics)
 
 def main():
     args = parse_args()
@@ -74,7 +90,6 @@ def main():
     cursor = init_database(config)
     load_data_into_db(cursor, config, args.dataset_path)
     label_data(cursor, config, args.result_path)
-
 
 if __name__=="__main__": 
     main() 
