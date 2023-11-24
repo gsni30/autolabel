@@ -10,7 +10,7 @@ This app can be used for:
 3. Run the command given in the Usage section.
 
 ## Usage
-python3 autolabel.py --config_file_path 'config.json' --dataset_path './seed2.csv' --result_path './result.csv' --key 'sk-.....'
+`python3 autolabel.py --config_file_path 'config.json' --dataset_path './seed2.csv' --result_path './result.csv' --key 'sk-.....'``
 
 config_file_path: Path where the config file is stored.
 dataset_path: Path where the dataset is stored. (For now only CSV's are supported).
